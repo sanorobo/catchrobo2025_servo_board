@@ -4,9 +4,9 @@
 #include <halx/driver/c6x0.hpp>
 #include <halx/peripheral.hpp>
 
-extern UART_HandleTypeDef huart1; // serial servo
-extern UART_HandleTypeDef huart2; // rs485
-extern UART_HandleTypeDef huart3; // stlink
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart5;
 
 extern FDCAN_HandleTypeDef hfdcan1;
@@ -14,6 +14,8 @@ extern FDCAN_HandleTypeDef hfdcan2;
 extern FDCAN_HandleTypeDef hfdcan3;
 
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim16;
+extern TIM_HandleTypeDef htim17;
 
 template <UART_HandleTypeDef *Handle> auto uart_init(uint32_t baud_rate) {
   static uint8_t tx_buf[512];
@@ -30,14 +32,18 @@ extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
   using namespace halx::driver;
 
-  auto uart1 = uart_init<&huart1>(1000000);
-  auto uart2 = uart_init<&huart2>(115200);
-  auto uart3 = uart_init<&huart3>(115200);
-  auto uart5 = uart_init<&huart5>(115200);
+  auto uart1 = uart_init<&huart1>(1000000); // serial servo
+  auto uart2 = uart_init<&huart2>(115200);  // rs485
+  auto uart3 = uart_init<&huart3>(115200);  // stlink
+  auto uart5 = uart_init<&huart5>(115200);  // uart / i2c
 
   Can<&hfdcan1> can1;
   Can<&hfdcan2> can2;
   Can<&hfdcan3> can3;
+
+  Tim<&htim3> tim3;   // servo 1 / 2
+  Tim<&htim16> tim16; // 1kHz
+  Tim<&htim17> tim17; // 10kHz
 
   enable_stdout(uart3);
 
