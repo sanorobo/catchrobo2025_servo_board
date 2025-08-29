@@ -35,7 +35,7 @@ extern "C" void main_thread(void *) {
   HAL_UART_DeInit(&huart3);
   HAL_UART_DeInit(&huart5);
 
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = 1000000;
   huart2.Init.BaudRate = 115200;
   huart3.Init.BaudRate = 115200;
   huart5.Init.BaudRate = 115200;
