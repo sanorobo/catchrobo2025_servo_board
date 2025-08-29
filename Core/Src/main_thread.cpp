@@ -36,6 +36,8 @@ extern "C" void main_thread(void *) {
 
   enable_stdout(uart3);
 
+  // これより上はbaud rate以外触らないほうがいいと思う
+
   C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};
 
