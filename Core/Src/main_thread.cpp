@@ -28,7 +28,6 @@ static uint8_t uart5_rx_buf[512];
 
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
-  using namespace halx::driver;
 
   HAL_UART_DeInit(&huart1);
   HAL_UART_DeInit(&huart2);
@@ -63,6 +62,8 @@ extern "C" void main_thread(void *) {
   enable_stdout(uart3);
 
   // ここより上はbaud rate以外触らない
+
+  using namespace halx::driver;
 
   C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};
