@@ -45,10 +45,10 @@ extern "C" void main_thread(void *) {
   HAL_UART_Init(&huart3);
   HAL_UART_Init(&huart5);
 
-  Uart<&huart1, UartTxDma, UartRxDma> uart1{uart1_tx_buf, uart1_rx_buf};
-  Uart<&huart2, UartTxDma, UartRxDma> uart2{uart2_tx_buf, uart2_rx_buf};
-  Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf};
-  Uart<&huart5, UartTxDma, UartRxDma> uart5{uart5_tx_buf, uart5_rx_buf};
+  Uart<&huart1, UartTxDma, UartRxDma> uart1{uart1_tx_buf, uart1_rx_buf}; // serial servo
+  Uart<&huart2, UartTxDma, UartRxDma> uart2{uart2_tx_buf, uart2_rx_buf}; // rs485
+  Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf}; // stlink
+  Uart<&huart5, UartTxDma, UartRxDma> uart5{uart5_tx_buf, uart5_rx_buf}; // uart / i2c
 
   Can<&hfdcan1> can1;
   Can<&hfdcan2> can2;
