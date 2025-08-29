@@ -54,7 +54,9 @@ extern "C" void main_thread(void *) {
   Can<&hfdcan2> can2;
   Can<&hfdcan3> can3;
 
-  Tim<&htim3> tim3;   // servo 1 / 2
+  Pwm pwm3_ch3{&htim3, TIM_CHANNEL_3}; // servo
+  Pwm pwm3_ch4{&htim3, TIM_CHANNEL_4}; // servo
+
   Tim<&htim16> tim16; // 1kHz
   Tim<&htim17> tim17; // 10kHz
 
