@@ -13,32 +13,27 @@ extern FDCAN_HandleTypeDef hfdcan1;
 extern FDCAN_HandleTypeDef hfdcan2;
 extern FDCAN_HandleTypeDef hfdcan3;
 
-static uint8_t dma_buf[8192];
+extern TIM_HandleTypeDef htim3;
+
+template <UART_HandleTypeDef *Handle> auto uart_init(uint32_t baud_rate) {
+  static uint8_t tx_buf[512];
+  static uint8_t rx_buf[512];
+
+  HAL_UART_DeInit(Handle);
+  Handle->Init.BaudRate = baud_rate;
+  HAL_UART_Init(Handle);
+
+  return halx::peripheral::Uart<Handle, halx::peripheral::UartTxDma, halx::peripheral::UartRxDma>{tx_buf, rx_buf};
+}
 
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
   using namespace halx::driver;
 
-  HAL_UART_DeInit(&huart1);
-  HAL_UART_DeInit(&huart2);
-  HAL_UART_DeInit(&huart3);
-  HAL_UART_DeInit(&huart5);
-
-  huart1.Init.BaudRate = 1000000;
-  huart2.Init.BaudRate = 115200;
-  huart3.Init.BaudRate = 115200;
-  huart5.Init.BaudRate = 115200;
-
-  HAL_UART_Init(&huart1);
-  HAL_UART_Init(&huart2);
-  HAL_UART_Init(&huart3);
-  HAL_UART_Init(&huart5);
-
-  std::span dma_span{dma_buf};
-  Uart<&huart1, UartTxDma, UartRxDma> uart1{dma_span.subspan<512 * 0, 512>(), dma_span.subspan<512 * 1, 512>()};
-  Uart<&huart2, UartTxDma, UartRxDma> uart2{dma_span.subspan<512 * 2, 512>(), dma_span.subspan<512 * 3, 512>()};
-  Uart<&huart3, UartTxDma, UartRxDma> uart3{dma_span.subspan<512 * 4, 512>(), dma_span.subspan<512 * 5, 512>()};
-  Uart<&huart5, UartTxDma, UartRxDma> uart5{dma_span.subspan<512 * 6, 512>(), dma_span.subspan<512 * 7, 512>()};
+  auto uart1 = uart_init<&huart1>(1000000);
+  auto uart2 = uart_init<&huart2>(115200);
+  auto uart3 = uart_init<&huart3>(115200);
+  auto uart5 = uart_init<&huart5>(115200);
 
   Can<&hfdcan1> can1;
   Can<&hfdcan2> can2;
@@ -46,7 +41,7 @@ extern "C" void main_thread(void *) {
 
   enable_stdout(uart3);
 
-  // これより上はbaud rate以外触らないほうがいいと思う
+  // ここより上はbaud rate以外触らない
 
   C6x0Manager c6x0_manager{can1};
   C6x0 c6x0{c6x0_manager, C6x0Type::C610, C6x0Id::ID_1};
