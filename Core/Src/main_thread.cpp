@@ -19,10 +19,20 @@ extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
   using namespace halx::driver;
 
+  HAL_UART_DeInit(&huart1);
+  HAL_UART_DeInit(&huart2);
+  HAL_UART_DeInit(&huart3);
+  HAL_UART_DeInit(&huart5);
+
   huart1.Init.BaudRate = 1000000;
   huart2.Init.BaudRate = 115200;
   huart3.Init.BaudRate = 115200;
   huart5.Init.BaudRate = 115200;
+
+  HAL_UART_Init(&huart1);
+  HAL_UART_Init(&huart2);
+  HAL_UART_Init(&huart3);
+  HAL_UART_Init(&huart5);
 
   std::span dma_span{dma_buf};
   Uart<&huart1, UartTxDma, UartRxDma> uart1{dma_span.subspan<512 * 0, 512>(), dma_span.subspan<512 * 1, 512>()};
