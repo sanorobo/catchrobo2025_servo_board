@@ -17,25 +17,38 @@ extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 
-template <UART_HandleTypeDef *Handle> auto uart_init(uint32_t baud_rate) {
-  static uint8_t tx_buf[512];
-  static uint8_t rx_buf[512];
-
-  HAL_UART_DeInit(Handle);
-  Handle->Init.BaudRate = baud_rate;
-  HAL_UART_Init(Handle);
-
-  return halx::peripheral::Uart<Handle, halx::peripheral::UartTxDma, halx::peripheral::UartRxDma>{tx_buf, rx_buf};
-}
+static uint8_t uart1_tx_buf[512];
+static uint8_t uart1_rx_buf[512];
+static uint8_t uart2_tx_buf[512];
+static uint8_t uart2_rx_buf[512];
+static uint8_t uart3_tx_buf[512];
+static uint8_t uart3_rx_buf[512];
+static uint8_t uart5_tx_buf[512];
+static uint8_t uart5_rx_buf[512];
 
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
   using namespace halx::driver;
 
-  auto uart1 = uart_init<&huart1>(1000000); // serial servo
-  auto uart2 = uart_init<&huart2>(115200);  // rs485
-  auto uart3 = uart_init<&huart3>(115200);  // stlink
-  auto uart5 = uart_init<&huart5>(115200);  // uart / i2c
+  HAL_UART_DeInit(&huart1);
+  HAL_UART_DeInit(&huart2);
+  HAL_UART_DeInit(&huart3);
+  HAL_UART_DeInit(&huart5);
+
+  huart1.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 115200;
+  huart3.Init.BaudRate = 115200;
+  huart5.Init.BaudRate = 115200;
+
+  HAL_UART_Init(&huart1);
+  HAL_UART_Init(&huart2);
+  HAL_UART_Init(&huart3);
+  HAL_UART_Init(&huart5);
+
+  Uart<&huart1, UartTxDma, UartRxDma> uart1{uart1_tx_buf, uart1_rx_buf};
+  Uart<&huart2, UartTxDma, UartRxDma> uart2{uart2_tx_buf, uart2_rx_buf};
+  Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf};
+  Uart<&huart5, UartTxDma, UartRxDma> uart5{uart5_tx_buf, uart5_rx_buf};
 
   Can<&hfdcan1> can1;
   Can<&hfdcan2> can2;
