@@ -56,8 +56,8 @@ extern "C" void main_thread(void *) {
   Pwm pwm3_ch3{&htim3, TIM_CHANNEL_3}; // servo
   Pwm pwm3_ch4{&htim3, TIM_CHANNEL_4}; // servo
 
-  Gpio led_r{GPIOA, GPIO_PIN_7};
-  Gpio led_g{GPIOA, GPIO_PIN_6};
+  Gpio led_r{GPIOA, GPIO_PIN_6};
+  Gpio led_g{GPIOA, GPIO_PIN_7};
   Gpio led_b{GPIOA, GPIO_PIN_5};
 
   Tim<&htim16> tim16; // 1kHz
