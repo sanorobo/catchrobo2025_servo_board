@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set the project name
-set(CMAKE_PROJECT_NAME catchrobo2025_sub_board)
+set(CMAKE_PROJECT_NAME catchrobo2025_servo_board)
 
 # Include toolchain file
 include("cmake/gcc-arm-none-eabi.cmake")

@@ -4,57 +4,34 @@
 #include <halx/driver/c6x0.hpp>
 #include <halx/peripheral.hpp>
 
-extern UART_HandleTypeDef huart1;
-extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
-extern UART_HandleTypeDef huart5;
 
 extern FDCAN_HandleTypeDef hfdcan1;
-extern FDCAN_HandleTypeDef hfdcan2;
-extern FDCAN_HandleTypeDef hfdcan3;
 
-extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 
-static uint8_t uart1_tx_buf[512];
-static uint8_t uart1_rx_buf[512];
-static uint8_t uart2_tx_buf[512];
-static uint8_t uart2_rx_buf[512];
 static uint8_t uart3_tx_buf[512];
 static uint8_t uart3_rx_buf[512];
-static uint8_t uart5_tx_buf[512];
-static uint8_t uart5_rx_buf[512];
 
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
 
-  HAL_UART_DeInit(&huart1);
-  HAL_UART_DeInit(&huart2);
   HAL_UART_DeInit(&huart3);
-  HAL_UART_DeInit(&huart5);
 
-  huart1.Init.BaudRate = 1000000;
-  huart2.Init.BaudRate = 115200;
   huart3.Init.BaudRate = 115200;
-  huart5.Init.BaudRate = 115200;
 
-  HAL_UART_Init(&huart1);
-  HAL_UART_Init(&huart2);
   HAL_UART_Init(&huart3);
-  HAL_UART_Init(&huart5);
 
-  Uart<&huart1, UartTxDma, UartRxDma> uart1{uart1_tx_buf, uart1_rx_buf}; // serial servo
-  Uart<&huart2, UartTxDma, UartRxDma> uart2{uart2_tx_buf, uart2_rx_buf}; // rs485
   Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf}; // stlink
-  Uart<&huart5, UartTxDma, UartRxDma> uart5{uart5_tx_buf, uart5_rx_buf}; // uart / i2c
 
   Can<&hfdcan1> can1;
-  Can<&hfdcan2> can2;
-  Can<&hfdcan3> can3;
 
-  Pwm pwm3_ch3{&htim3, TIM_CHANNEL_3}; // servo
-  Pwm pwm3_ch4{&htim3, TIM_CHANNEL_4}; // servo
+  // Pwm pwm3_ch3{&htim4, TIM_CHANNEL_3}; // servo
+  // Pwm pwm3_ch4{&htim4, TIM_CHANNEL_4}; // servo
 
   Gpio led_r{GPIOA, GPIO_PIN_6};
   Gpio led_g{GPIOA, GPIO_PIN_7};
