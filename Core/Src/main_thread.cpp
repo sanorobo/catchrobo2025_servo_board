@@ -30,8 +30,15 @@ extern "C" void main_thread(void *) {
 
   Can<&hfdcan1> can1;
 
-  // Pwm pwm3_ch3{&htim4, TIM_CHANNEL_3}; // servo
-  // Pwm pwm3_ch4{&htim4, TIM_CHANNEL_4}; // servo
+  Pwm servo1{&htim2, TIM_CHANNEL_3};
+  Pwm servo2{&htim2, TIM_CHANNEL_2};
+  Pwm servo3{&htim2, TIM_CHANNEL_1};
+  Pwm servo4{&htim1, TIM_CHANNEL_4};
+  Pwm servo5{&htim1, TIM_CHANNEL_3};
+  Pwm servo6{&htim1, TIM_CHANNEL_2};
+  Pwm servo7{&htim1, TIM_CHANNEL_1};
+  Pwm servo8{&htim4, TIM_CHANNEL_2};
+  Pwm servo9{&htim4, TIM_CHANNEL_1};
 
   Gpio led_r{GPIOA, GPIO_PIN_6};
   Gpio led_g{GPIOA, GPIO_PIN_7};
