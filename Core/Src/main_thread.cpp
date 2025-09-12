@@ -20,12 +20,6 @@ static uint8_t uart3_rx_buf[512];
 extern "C" void main_thread(void *) {
   using namespace halx::peripheral;
 
-  HAL_UART_DeInit(&huart3);
-
-  huart3.Init.BaudRate = 115200;
-
-  HAL_UART_Init(&huart3);
-
   Uart<&huart3, UartTxDma, UartRxDma> uart3{uart3_tx_buf, uart3_rx_buf}; // stlink
 
   Can<&hfdcan1> can1;
